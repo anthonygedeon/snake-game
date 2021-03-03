@@ -7,9 +7,13 @@ pygame.init()
 
 width = 500
 height = 400
+
 screen = pygame.display.set_mode([width, height])
 
-green = (0, 128 ,0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 128 ,0)
 
 x = 0
 y = 0 
@@ -21,10 +25,41 @@ rectangle = (
     20
 )
 
-running = True
+class Grid:
+    
+    grid = []
 
-colNumber = 0
-rowNumber = 0
+    def __init__(self, screen):
+        self.screen = screen
+        
+
+    def get_columns(self):
+        return math.floor(self.screen.width / 50)
+
+    def get_rows(self):
+        return math.floor(self.screen.height / 40)
+
+    def get_total_number_of_cells(self):
+        return self.get_columns * self.get_rows
+    
+    def create_grid(self):
+        
+        for row in self.get_rows():
+            for col in self.get_columns():
+                pass
+
+    
+
+class Cell:
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def create_cell():
+        pass
+
+running = True
 
 while running:
 
@@ -35,32 +70,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         
+        # Control Sprite
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                
-                x += 10
+                pass
 
             if event.key == pygame.K_LEFT:
-                x -= 10
+                pass
 
             if event.key == pygame.K_UP:
-                y += 10
+                pass
 
             if event.key == pygame.K_DOWN:
-                y -= 10
+                pass
 
-    for col in range(1, int(width / 20)):
-
-        colNumber += 20
-        pygame.draw.line(screen, (255, 255, 255), [colNumber, 0], [colNumber, height], 1)
-
-    for row in range(0, int(height / 20)):
-
-        rowNumber += 20
-
-        pygame.draw.line(screen, (255, 255, 255), (0, rowNumber), (0 + width * math.cos(0), rowNumber + width * math.sin(0)), 1)
-
-    pygame.draw.rect(screen, color=green, rect=rectangle)
+    pygame.draw.rect(screen, color=GREEN, rect=rectangle)
 
     pygame.display.flip()
 
