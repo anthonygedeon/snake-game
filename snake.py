@@ -1,6 +1,5 @@
 import sys
 import math
-import pprint
 
 import pygame
 
@@ -8,6 +7,7 @@ pygame.init()
 
 width = 500
 height = 400
+fps = 5
 
 screen = pygame.display.set_mode([width, height])
 clock = pygame.time.Clock()
@@ -15,17 +15,115 @@ clock = pygame.time.Clock()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-GREEN = (0, 128 ,0)
+GREEN = (0, 128, 0)
 
 x = 0
-y = 0 
+y = 0
 
-rectangle = (
-    x,
-    y,
-    19,
-    19
-)
+class Window:
+
+    def __init__(self, window):
+        self.window = window
+    
+    def get_window_dimension(self):
+        return {
+            "width":  self.window.display.get_surface().get_width(),
+            "height": self.window.display.get_surface().get_height()
+        }
+
+class Physics:
+
+    @staticmethod
+    def collision_detection(object1, object2):
+        pass
+
+class Controller:
+
+    direction = {
+        "right": False,
+        "left": False,
+        "up": False,
+        "down": False
+    }
+
+    def reset_movement_state(self):
+        self.direction["right"] = False
+        self.direction["left"] = False
+        self.direction["up"] = False
+        self.direction["down"] = False
+
+    def move_right(self):
+        self.reset_movement_state()
+        self.direction["right"] = True
+
+    def move_left(self):
+        self.reset_movement_state()
+        self.direction["left"] = True
+
+    def move_up(self):
+        self.reset_movement_state()
+        self.direction["up"] = True
+
+    def move_down(self):
+        self.reset_movement_state()
+        self.direction["down"] = True
+
+    def continous_movement(self):
+        global x
+        global y
+        if self.direction["right"]:
+            self.move_right()
+            x += 20
+        elif self.direction["left"]:
+            self.move_left()
+            x -= 20
+        elif self.direction["up"]:
+            self.move_up()
+            y -= 20
+        elif self.direction["down"]:
+            self.move_down()
+            y += 20
+
+class Snake(Controller):
+
+    def __init__(self, width):
+        self.width = width
+        self.height = width
+    
+    def set_position(self):
+        global x
+        global y
+        x = 50
+        y = 50
+
+    def die(self):
+        pass
+
+    def eat(self):
+        pass
+
+    def grow(self):
+        pass
+
+    def draw_snake(self):
+        pygame.draw.rect(screen, color=GREEN, rect=[x, y, self.width, self.width])
+
+snake = Snake(20)
+
+class Fruit:
+
+    def __init__(self, color):
+        self.color = color
+
+    def get_position(self):
+        pass
+
+    def set_position(self):
+        pass
+
+    def draw_fruit(self):
+        pass
+
 
 class Cell:
     
@@ -35,20 +133,25 @@ class Cell:
         self.width = width
         self.height = width
 
-    def create_cell():
-        pass
+    def create_cell(self):
+        return (
+            self.x,
+            self.y,
+            self.width,
+            self.height
+        )
 
 class Grid:
     
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, window):
+        self.window = window
         self.grid = []
     
     def get_columns(self):
-        return math.floor(width / 20)
+        return math.floor(self.window.get("width") / snake.width)
 
     def get_rows(self):
-        return math.floor(height / 20)
+        return math.floor(self.window.get("height") / snake.width)
 
     def get_total_number_of_cells(self):
         return self.get_columns() * self.get_rows()
@@ -57,7 +160,7 @@ class Grid:
         for row in range(0, self.get_rows()):
             self.grid.append([])
             for col in range(0, self.get_columns()):
-                self.grid[row].append(Cell(col * 20, row * 20, 20))
+                self.grid[row].append(Cell(col * snake.width, row * snake.width, snake.width))
 
         return self.grid
 
@@ -66,27 +169,20 @@ class Grid:
 
         for row in range(len(matrix_grid)):
             for col in range(len(matrix_grid[row])):
+                pygame.draw.rect(screen, WHITE, matrix_grid[row][col].create_cell(), 1)
 
-                pygame.draw.rect(screen, WHITE, [
-                    matrix_grid[row][col].x, 
-                    matrix_grid[row][col].y, 
-                    matrix_grid[row][col].width, 
-                    matrix_grid[row][col].height], 1)
-
-        return 0
-
+        return
 
 running = True
 
-grid = Grid(None)
-
-grid.draw_grid()
+window = Window(pygame)
+grid = Grid(window.get_window_dimension())
 
 while running:
+    screen.fill(BLACK)
+    clock.tick(fps)
 
-    clock.tick(60)
-
-    # USER INPUT
+    # User Input
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -94,26 +190,25 @@ while running:
         # Control Sprite
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                pass
+                snake.move_right()
 
             if event.key == pygame.K_LEFT:
-                pass
+                snake.move_left()
 
             if event.key == pygame.K_UP:
-                pass
+                snake.move_up()
 
             if event.key == pygame.K_DOWN:
-                pass
+                snake.move_down()
 
-    pygame.draw.rect(screen, color=GREEN, rect=rectangle)
+    snake.draw_snake()
 
-    # pygame.draw.rect(screen, WHITE, [0, 0, 20, 20], 1)
+    snake.continous_movement()
 
-    # pygame.draw.rect(screen, WHITE, [20, 0, 20, 20], 1)
-
-    # pygame.draw.rect(screen, WHITE, [20, 20, 20, 20], 1)
-
-    pygame.display.flip()
+    # DEBUGGING METHOD
+    grid.draw_grid()
+    
+    pygame.display.update()
 
 pygame.quit()
 sys.exit()
