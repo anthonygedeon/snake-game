@@ -111,8 +111,8 @@ class Snake(Controller):
     def __init__(self, x, y, width):
         self.x = x
         self.y = y
+        self.pos = pygame.Vector2(x, y);
         self.width = width
-        self.height = width
     
     def set_position(self):
         global x
@@ -124,19 +124,21 @@ class Snake(Controller):
         self.reset_movement_state()
         self.set_position()
 
-    def eat(self):
+    def grow(self, body):
+        print(snake_body)
+        snake_body.insert(1, body)
+
+    def shift_snake_body(self):
         pass
 
-    def grow(self):
-        pass
-
-    def draw_snake(self):
-        pygame.draw.rect(screen, color=GREEN, rect=[
-            self.x, 
-            self.y, 
-            self.width, 
-            self.width
-        ])
+    def draw_snake(self, snake_body):
+        for body in snake_body:
+            pygame.draw.rect(screen, color=GREEN, rect=[
+                body.x, 
+                body.y, 
+                self.width, 
+                self.width
+            ])
 
 class Fruit:
 
@@ -218,10 +220,17 @@ running = True
 window = Window(pygame)
 grid = Grid(window.get_window_dimension())
 
+snake = Snake()
+
+snake_body = [snake]
+
 while running:
+
     screen.fill(BLACK)
     clock.tick(fps)
+    
     snake = Snake(x, y, 20)
+    # print(snake_body)
 
     # User Input
     for event in pygame.event.get():
@@ -242,20 +251,21 @@ while running:
             if event.key == pygame.K_DOWN:
                 snake.move_down()
 
-    snake.draw_snake()
+    snake.draw_snake(snake_body)
 
     fruit.draw_fruit()
 
     snake.continous_movement()
 
     # DEBUGGING METHOD
-    grid.draw_grid()
+    # grid.draw_grid()
 
     if Physics.is_collision_detection(snake, window.get_window_dimension()):
         snake.die()
+        fruit.change_location()
     
     if Physics.is_squares_colliding(snake, fruit.get_location()):
-        snake.grow()
+        snake.grow(snake)
         fruit.change_location()
 
     pygame.display.update()
