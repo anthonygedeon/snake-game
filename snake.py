@@ -21,6 +21,8 @@ class Game:
 
         pygame.init()
         
+        self.snake_vector = pygame.Vector2(240, 180)
+        self.fruit_vector = pygame
         self.clock = pygame.time.Clock()
         self.running = True
         self.fps = frame_per_second
@@ -40,7 +42,7 @@ class Game:
             self.screen.fill(self.colors["black"])
             self.clock.tick(self.fps)
         
-            snake = Snake(x, y, 20)
+            snake = Snake()
             # print(snake_body)
 
             # User Input
@@ -81,20 +83,12 @@ class Game:
 
             pygame.display.update()
 
+game = Game(500, 400, 5)
 
 class Snake(Controller):
 
-    def __init__(self, x, y, width):
-        self.x = x
-        self.y = y
-        self.pos = pygame.Vector2(x, y);
-        self.width = width
-    
-    def set_position(self):
-        global x
-        global y
-        x = 240 # middle x
-        y = 180 # middle y
+    def __init__(self):
+        self.width = 20
 
     def die(self):
         self.reset_movement_state()
@@ -110,14 +104,12 @@ class Snake(Controller):
 
     def draw_snake(self):
         #for body in snake_body:
-        pygame.draw.rect(screen, color=GREEN, rect=[
-            self.x, 
-            self.y, 
+        pygame.draw.rect(game.screen, color=game.colors["green"], rect=[
+            game.snake_vector.x, 
+            game.snake_vector.y, 
             self.width, 
             self.width
         ])
-
-game = Game(500, 400, 5)
 
 game.game_loop()
 
