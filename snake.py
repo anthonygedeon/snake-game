@@ -1,110 +1,86 @@
 import sys
-import math
-import random
+
+from window import Window
+from grid import Grid
+from physics import Physics
+from controller import Controller
+from fruit import Fruit
 
 import pygame
 
-pygame.init()
+window = Window(pygame)
+grid = Grid(window.get_window_dimension())
+fruit = Fruit()
 
-width = 500
-height = 400
-fps = 5
+class Game:
 
-screen = pygame.display.set_mode([width, height])
-clock = pygame.time.Clock()
+    def __init__(self, 
+    width, 
+    height, 
+    frame_per_second):
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 128, 0)
-
-x = 240
-y = 180
-
-class Window:
-
-    def __init__(self, window):
-        self.window = window
-    
-    def get_window_dimension(self):
-        return {
-            "width":  self.window.display.get_surface().get_width(),
-            "height": self.window.display.get_surface().get_height()
+        pygame.init()
+        
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.fps = frame_per_second
+        self.width = width
+        self.height = height
+        self.screen =  pygame.display.set_mode([self.width, self.height])
+        self.colors = {
+            "white": (255, 255, 255),
+            "black": (0, 0, 0),
+            "red": (255, 0, 0),
+            "green": (0, 128, 0)
         }
 
-class Physics:
+    def game_loop(self):
+        while self.running:
 
-    @staticmethod 
-    def is_collision_detection(object1, object2):
-        if object1.x > object2["width"]:
-            return True
-        elif object1.y > object2["height"]:
-            return True
-        elif object1.x < 0:
-            return True
-        elif object1.y < 0:
-            return True
-
-        return False
-
-    def is_squares_colliding(square1, square2):
-        if square1.x == square2.x and square1.y == square2.y:
-            return True
+            self.screen.fill(self.colors["black"])
+            self.clock.tick(self.fps)
         
-        return False
+            snake = Snake(x, y, 20)
+            # print(snake_body)
 
-    @staticmethod
-    def __collision_detection(object1, object2):
-        pass
-        
+            # User Input
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                
+                # Control Sprite
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        snake.move_right()
 
+                    if event.key == pygame.K_LEFT:
+                        snake.move_left()
 
-class Controller:
+                    if event.key == pygame.K_UP:
+                        snake.move_up()
 
-    direction = {
-        "right": False,
-        "left": False,
-        "up": False,
-        "down": False
-    }
+                    if event.key == pygame.K_DOWN:
+                        snake.move_down()
 
-    def reset_movement_state(self):
-        self.direction["right"] = False
-        self.direction["left"] = False
-        self.direction["up"] = False
-        self.direction["down"] = False
+            snake.draw_snake()
 
-    def move_right(self):
-        self.reset_movement_state()
-        self.direction["right"] = True
+            fruit.draw_fruit()
 
-    def move_left(self):
-        self.reset_movement_state()
-        self.direction["left"] = True
+            snake.continous_movement()
 
-    def move_up(self):
-        self.reset_movement_state()
-        self.direction["up"] = True
+            # DEBUGGING METHOD
+            # grid.draw_grid()
 
-    def move_down(self):
-        self.reset_movement_state()
-        self.direction["down"] = True
+            if Physics.is_collision_detection(snake, window.get_window_dimension()):
+                snake.die()
+                fruit.change_location()
+            
+            if Physics.is_squares_colliding(snake, fruit.get_location()):
+                snake.grow(snake)
+                fruit.change_location()
 
-    def continous_movement(self):
-        global x
-        global y
-        if self.direction["right"]:
-            self.move_right()
-            x += 20
-        elif self.direction["left"]:
-            self.move_left()
-            x -= 20
-        elif self.direction["up"]:
-            self.move_up()
-            y -= 20
-        elif self.direction["down"]:
-            self.move_down()
-            y += 20
+            pygame.display.update()
+
 
 class Snake(Controller):
 
@@ -125,150 +101,26 @@ class Snake(Controller):
         self.set_position()
 
     def grow(self, body):
-        print(snake_body)
-        snake_body.insert(1, body)
+        # print(snake_body)
+        # snake_body.insert(1, body)
+        pass
 
     def shift_snake_body(self):
         pass
 
-    def draw_snake(self, snake_body):
-        for body in snake_body:
-            pygame.draw.rect(screen, color=GREEN, rect=[
-                body.x, 
-                body.y, 
-                self.width, 
-                self.width
-            ])
-
-class Fruit:
-
-    def __init__(self):
-
-        self.x = random.randrange(0, width, 20)
-        self.y = random.randrange(0, height, 20)
-
-        self.color = RED
-        self.width = 20
-        self.pos = pygame.Vector2(self.x, self.y)
-
-    def get_location(self):
-        return self.pos
-
-    def change_location(self):
-        self.__init__() # TODO: update x, y coordinates without invoking the init method
-
-    def draw_fruit(self):
-        pygame.draw.rect(screen, color=self.color, rect=[
-            self.pos.x, 
-            self.pos.y, 
+    def draw_snake(self):
+        #for body in snake_body:
+        pygame.draw.rect(screen, color=GREEN, rect=[
+            self.x, 
+            self.y, 
             self.width, 
             self.width
         ])
 
-fruit = Fruit()
+game = Game(500, 400, 5)
 
-class Cell:
-    
-    def __init__(self, x, y, width):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = width
-
-    def create_cell(self):
-        return (
-            self.x,
-            self.y,
-            self.width,
-            self.height
-        )
-
-class Grid:
-    
-    def __init__(self, window):
-        self.window = window
-        self.grid = []
-    
-    def get_columns(self):
-        return math.floor(self.window.get("width") / snake.width)
-
-    def get_rows(self):
-        return math.floor(self.window.get("height") / snake.width)
-
-    def get_total_number_of_cells(self):
-        return self.get_columns() * self.get_rows()
-    
-    def create_grid(self):
-        for row in range(0, self.get_rows()):
-            self.grid.append([])
-            for col in range(0, self.get_columns()):
-                self.grid[row].append(Cell(col * snake.width, row * snake.width, snake.width))
-
-        return self.grid
-
-    def draw_grid(self):
-        matrix_grid = self.create_grid()
-
-        for row in range(len(matrix_grid)):
-            for col in range(len(matrix_grid[row])):
-                pygame.draw.rect(screen, WHITE, matrix_grid[row][col].create_cell(), 1)
-
-        return
-
-running = True
-
-window = Window(pygame)
-grid = Grid(window.get_window_dimension())
-
-snake = Snake()
-
-snake_body = [snake]
-
-while running:
-
-    screen.fill(BLACK)
-    clock.tick(fps)
-    
-    snake = Snake(x, y, 20)
-    # print(snake_body)
-
-    # User Input
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        
-        # Control Sprite
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                snake.move_right()
-
-            if event.key == pygame.K_LEFT:
-                snake.move_left()
-
-            if event.key == pygame.K_UP:
-                snake.move_up()
-
-            if event.key == pygame.K_DOWN:
-                snake.move_down()
-
-    snake.draw_snake(snake_body)
-
-    fruit.draw_fruit()
-
-    snake.continous_movement()
-
-    # DEBUGGING METHOD
-    # grid.draw_grid()
-
-    if Physics.is_collision_detection(snake, window.get_window_dimension()):
-        snake.die()
-        fruit.change_location()
-    
-    if Physics.is_squares_colliding(snake, fruit.get_location()):
-        snake.grow(snake)
-        fruit.change_location()
-
-    pygame.display.update()
+game.game_loop()
 
 pygame.quit()
+
 sys.exit()
