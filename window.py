@@ -5,6 +5,6 @@ class Window:
     
     def get_window_dimension(self):
         return {
-            "width":  self.window.display.get_surface().get_width(),
+            "width": self.window.display.get_surface().get_width(),
             "height": self.window.display.get_surface().get_height()
         }

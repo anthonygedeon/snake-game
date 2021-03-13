@@ -2,9 +2,9 @@ class Physics:
     
     @staticmethod 
     def is_collision_detection(object1, object2):
-        if object1.x > object2["width"]:
+        if int(object1.x) > int(object2["width"]):
             return True
-        elif object1.y > object2["height"]:
+        elif int(object1.y) > int(object2["height"]):
             return True
         elif object1.x < 0:
             return True

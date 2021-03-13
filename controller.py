@@ -1,11 +1,16 @@
+import pygame
+
 class Controller:
-    
+
     direction = {
         "right": False,
         "left": False,
         "up": False,
         "down": False
     }
+
+    def __init__(self):
+        self.position = pygame.Vector2(240, 180) 
 
     def reset_movement_state(self):
         self.direction["right"] = False
@@ -30,17 +35,15 @@ class Controller:
         self.direction["down"] = True
 
     def continous_movement(self):
-        global x
-        global y
         if self.direction["right"]:
             self.move_right()
-            x += 20
+            self.position.x += 20
         elif self.direction["left"]:
             self.move_left()
-            x -= 20
+            self.position.x -= 20
         elif self.direction["up"]:
             self.move_up()
-            y -= 20
+            self.position.y -= 20
         elif self.direction["down"]:
             self.move_down()
-            y += 20
+            self.position.y += 20
