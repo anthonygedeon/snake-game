@@ -9,7 +9,7 @@ import physics
 import pygame
 
 fruit = fruit.Fruit()
-snake = snake.Snake()
+snakes = [snake.Snake()]
 
 class Game:
     
@@ -34,6 +34,8 @@ class Game:
         }
 
     def game_loop(self):
+        global snakes
+
         while self.running:
 
             self.screen.fill(self.colors["black"])
@@ -60,22 +62,23 @@ class Game:
                     if event.key == pygame.K_DOWN:
                         snake.move_down()
 
-            snake.draw_snake()
+            for snake in snakes:
+                snake.draw_snake()
+                snake.continous_movement()
+
+                if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
+
+                    snakes = snake.die(snakes)
+                    fruit.change_location()
+            
+                if physics.Physics.is_squares_colliding(snake.position, fruit.get_location()):
+                    snake.grow(snakes)
+                    fruit.change_location()
 
             fruit.draw_fruit()
 
-            snake.continous_movement()
-
             # DEBUGGING METHOD
             # grid.draw_grid()
-
-            if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
-                snake.die()
-                fruit.change_location()
-            
-            if physics.Physics.is_squares_colliding(snake.position, fruit.get_location()):
-                snake.grow(snake)
-                fruit.change_location()
 
             pygame.display.update()
 

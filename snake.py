@@ -9,21 +9,27 @@ class Snake(controller.Controller):
         super().__init__()
         self.width = 20
 
-    def set_position(self):
-        Snake.__init__(self)
+    def set_position(self, x, y):
+        self.position = pygame.Vector2(x, y)
 
-    def die(self):
+    def get_position(self):
+        return self.position
+
+    def die(self, snake_body):
         self.reset_movement_state()
-        self.set_position()
+        self.set_position(240, 180)
+        if len(snake_body) > 1:
+            return [snake_body[-1]]
+        else:
+            return snake_body
 
-    def grow(self, body):
-        pass
+    def grow(self, snake_body):
+        snake_body.insert(0, self)
 
     def shift_snake_body(self):
         pass
 
     def draw_snake(self):
-        #for body in snake_body:
         pygame.draw.rect(game.game.screen, color=game.game.colors["green"], rect=[
             self.position.x, 
             self.position.y, 
