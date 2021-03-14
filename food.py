@@ -4,7 +4,7 @@ import game
 
 import pygame
 
-class Fruit:
+class Food:
     
     def __init__(self):
 
@@ -21,7 +21,7 @@ class Fruit:
     def change_location(self):
         self.__init__() # TODO: update x, y coordinates without invoking the init method
 
-    def draw_fruit(self):
+    def draw_food(self):
         pygame.draw.rect(game.game.screen, color=self.color, rect=[
             self.position.x, 
             self.position.y, 

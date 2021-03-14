@@ -1,15 +1,17 @@
 import sys
 
 import window
-import fruit
+import food
 import grid
-import snake
+import snake as player
 import physics
+
+from helpers.shift import shift_left
 
 import pygame
 
-fruit = fruit.Fruit()
-snakes = [snake.Snake()]
+food = food.Food()
+snakes = [player.Snake()]
 
 class Game:
     
@@ -63,19 +65,23 @@ class Game:
                         snake.move_down()
 
             for snake in snakes:
-                snake.draw_snake()
-                snake.continous_movement()
+                if isinstance(snake, player.Snake):
+                    snake.draw_snake()
+                    snake.continous_movement()
 
-                if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
+                    if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
+                        snakes = snake.die(snakes)
+                        food.change_location()
+                
+                    if physics.Physics.is_squares_colliding(snake.position, food.get_location()):
+                        snake.grow(snakes)
+                        food.change_location()
 
-                    snakes = snake.die(snakes)
-                    fruit.change_location()
-            
-                if physics.Physics.is_squares_colliding(snake.position, fruit.get_location()):
-                    snake.grow(snakes)
-                    fruit.change_location()
+                elif isinstance(snake, player.SnakeBody):
+                    snake.draw_snake_body()
+                    snake.set_position(snakes)
 
-            fruit.draw_fruit()
+            food.draw_food()
 
             # DEBUGGING METHOD
             # grid.draw_grid()
