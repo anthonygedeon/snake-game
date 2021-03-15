@@ -6,8 +6,6 @@ import grid
 import snake as player
 import physics
 
-from helpers.shift import shift_left
-
 import pygame
 
 food = food.Food()
@@ -79,7 +77,7 @@ class Game:
 
                 elif isinstance(snake, player.SnakeBody):
                     snake.draw_snake_body()
-                    snake.set_position(snakes)
+                    snake.delay_snake_movement(snakes)
 
             food.draw_food()
 

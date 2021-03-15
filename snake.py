@@ -1,4 +1,3 @@
-import pprint
 import controller
 import game
 
@@ -45,12 +44,11 @@ class SnakeBody:
         self.position = pygame.Vector2(0, 0)
         self.width = 20
 
-    def set_position(self, whole_snake):
-        for body_part in whole_snake:
-            if isinstance(body_part, SnakeBody):
-                pprint.pprint(coordinate_list)
-                body_part.position = pygame.Vector2(coordinate_list[-2].x, coordinate_list[-2].y)
-        
+    def delay_snake_movement(self, whole_snake):
+        for i in range(1, len(whole_snake)):
+            self.position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
+            whole_snake[-i].position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
+
     def draw_snake_body(self):
         pygame.draw.rect(
             game.game.screen, 
