@@ -10,7 +10,7 @@ Install via pip:
 pip install -r requirements.txt
 ```
 
-Play:
+## Play:
 ```sh
 $ cd path/to/snake/dir
 $ python3 snake.py
