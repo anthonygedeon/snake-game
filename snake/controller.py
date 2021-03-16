@@ -1,16 +1,12 @@
 import pygame
 
+
 class Controller:
 
-    direction = {
-        "right": False,
-        "left": False,
-        "up": False,
-        "down": False
-    }
+    direction = {"right": False, "left": False, "up": False, "down": False}
 
     def __init__(self):
-        self.position = pygame.Vector2(240, 180) 
+        self.position = pygame.Vector2(240, 180)
 
     def reset_movement_state(self):
         self.direction["right"] = False

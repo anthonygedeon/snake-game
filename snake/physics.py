@@ -1,6 +1,5 @@
 class Physics:
-    
-    @staticmethod 
+    @staticmethod
     def is_collision_detection(object1, object2):
         if int(object1.x) > int(object2["width"]):
             return True
@@ -17,7 +16,7 @@ class Physics:
     def is_squares_colliding(square1, square2):
         if square1.x == square2.x and square1.y == square2.y:
             return True
-        
+
         return False
 
     @staticmethod

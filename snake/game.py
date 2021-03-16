@@ -12,26 +12,23 @@ food = food.Food()
 snakes = [player.Snake()]
 taken_spots = None
 
+
 class Game:
-    
-    def __init__(self, 
-    width, 
-    height, 
-    frame_per_second):
+    def __init__(self, width, height, frame_per_second):
 
         pygame.init()
-        
+
         self.clock = pygame.time.Clock()
         self.running = True
         self.fps = frame_per_second
         self.width = width
         self.height = height
-        self.screen =  pygame.display.set_mode([self.width, self.height])
+        self.screen = pygame.display.set_mode([self.width, self.height])
         self.colors = {
             "white": (255, 255, 255),
             "black": (0, 0, 0),
             "red": (255, 0, 0),
-            "green": (0, 128, 0)
+            "green": (0, 128, 0),
         }
 
     def game_loop(self):
@@ -45,7 +42,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                
+
                 # Control Sprite
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -61,17 +58,21 @@ class Game:
                         snake.move_down()
 
             for snake in snakes:
-                
+
                 taken_spots = [coordinate.position for coordinate in snakes]
 
                 if isinstance(snake, player.Snake):
                     snake.draw_snake()
 
-                    if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
+                    if physics.Physics.is_collision_detection(
+                        snake.position, window.get_window_dimension()
+                    ):
                         snakes = snake.die(snakes)
                         food.change_location()
-                
-                    if physics.Physics.is_squares_colliding(snake.position, food.get_location()):
+
+                    if physics.Physics.is_squares_colliding(
+                        snake.position, food.get_location()
+                    ):
                         snake.grow(snakes)
                         food.change_location()
 

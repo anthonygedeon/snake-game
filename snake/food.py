@@ -6,8 +6,8 @@ from helper import find_availabe_spot
 
 import pygame
 
+
 class Food:
-    
     def __init__(self):
 
         self.x = random.randrange(0, 500, 20)
@@ -25,9 +25,8 @@ class Food:
         self.position = pygame.Vector2(self.x, self.y)
 
     def draw_food(self):
-        pygame.draw.rect(game.game.screen, color=self.color, rect=[
-            self.position.x, 
-            self.position.y, 
-            self.width, 
-            self.width
-        ])
+        pygame.draw.rect(
+            game.game.screen,
+            color=self.color,
+            rect=[self.position.x, self.position.y, self.width, self.width],
+        )

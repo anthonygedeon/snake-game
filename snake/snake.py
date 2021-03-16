@@ -5,8 +5,8 @@ import pygame
 
 coordinate_list = []
 
-class Snake(controller.Controller):
 
+class Snake(controller.Controller):
     def __init__(self):
         super().__init__()
         self.width = 20
@@ -29,17 +29,16 @@ class Snake(controller.Controller):
         snake_body.insert(0, SnakeBody())
 
     def draw_snake(self):
-        pygame.draw.rect(game.game.screen, color=game.game.colors["green"], rect=[
-            self.position.x, 
-            self.position.y, 
-            self.width, 
-            self.width
-        ])
+        pygame.draw.rect(
+            game.game.screen,
+            color=game.game.colors["green"],
+            rect=[self.position.x, self.position.y, self.width, self.width],
+        )
         self._continous_movement()
         coordinate_list.append(self.position)
 
+
 class SnakeBody:
-    
     def __init__(self):
         self.position = pygame.Vector2(0, 0)
         self.width = 20
@@ -47,17 +46,15 @@ class SnakeBody:
     def _delay_snake_movement(self, whole_snake):
         for i in range(1, len(whole_snake)):
             self.position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
-            whole_snake[-i].position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
+            whole_snake[-i].position = pygame.Vector2(
+                coordinate_list[-i].x, coordinate_list[-i].y
+            )
 
     def draw_snake_body(self):
         pygame.draw.rect(
-            game.game.screen, 
-            color=game.game.colors["green"], 
-            rect=[
-                    self.position.x, 
-                    self.position.y, 
-                    self.width, 
-                    self.width
-                ])
+            game.game.screen,
+            color=game.game.colors["green"],
+            rect=[self.position.x, self.position.y, self.width, self.width],
+        )
 
         self._delay_snake_movement(game.snakes)
