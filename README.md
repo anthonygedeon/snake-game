@@ -24,5 +24,5 @@ $ python3 snake.py
 - RIGHT: Right Arrow Key
 
 ## TODO:
-- [ ] Snake Can collide with itself
+- [ ] Snake can collide with itself
 - [ ] Snake can't move in the opposite direction
