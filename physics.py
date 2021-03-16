@@ -19,3 +19,7 @@ class Physics:
             return True
         
         return False
+
+    @staticmethod
+    def is_snakehead_colliding_with_body(head, body):
+        pass

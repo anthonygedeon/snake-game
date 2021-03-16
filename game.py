@@ -10,6 +10,7 @@ import pygame
 
 food = food.Food()
 snakes = [player.Snake()]
+taken_spots = None
 
 class Game:
     
@@ -35,13 +36,10 @@ class Game:
 
     def game_loop(self):
         global snakes
-
+        global taken_spots
         while self.running:
 
             self.screen.fill(self.colors["black"])
-            self.clock.tick(self.fps)
-        
-            # print(snake_body)
 
             # User Input
             for event in pygame.event.get():
@@ -63,9 +61,11 @@ class Game:
                         snake.move_down()
 
             for snake in snakes:
+                
+                taken_spots = [coordinate.position for coordinate in snakes]
+
                 if isinstance(snake, player.Snake):
                     snake.draw_snake()
-                    snake.continous_movement()
 
                     if physics.Physics.is_collision_detection(snake.position, window.get_window_dimension()):
                         snakes = snake.die(snakes)
@@ -77,16 +77,15 @@ class Game:
 
                 elif isinstance(snake, player.SnakeBody):
                     snake.draw_snake_body()
-                    snake.delay_snake_movement(snakes)
 
             food.draw_food()
 
-            # DEBUGGING METHOD
-            # grid.draw_grid()
+            self.clock.tick(self.fps)
 
             pygame.display.update()
 
-game = Game(500, 400, 5)
+
+game = Game(500, 400, 10)
 
 window = window.Window(pygame)
 grid = grid.Grid(window.get_window_dimension())

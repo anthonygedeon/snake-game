@@ -35,7 +35,7 @@ class Snake(controller.Controller):
             self.width, 
             self.width
         ])
-        
+        self._continous_movement()
         coordinate_list.append(self.position)
 
 class SnakeBody:
@@ -44,7 +44,7 @@ class SnakeBody:
         self.position = pygame.Vector2(0, 0)
         self.width = 20
 
-    def delay_snake_movement(self, whole_snake):
+    def _delay_snake_movement(self, whole_snake):
         for i in range(1, len(whole_snake)):
             self.position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
             whole_snake[-i].position = pygame.Vector2(coordinate_list[-i].x, coordinate_list[-i].y)
@@ -59,3 +59,5 @@ class SnakeBody:
                     self.width, 
                     self.width
                 ])
+
+        self._delay_snake_movement(game.snakes)

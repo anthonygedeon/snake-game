@@ -34,7 +34,7 @@ class Controller:
         self.reset_movement_state()
         self.direction["down"] = True
 
-    def continous_movement(self):
+    def _continous_movement(self):
         if self.direction["right"]:
             self.move_right()
             self.position.x += 20

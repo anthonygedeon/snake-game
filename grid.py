@@ -1,6 +1,6 @@
 import math
 
-import snake
+import game
 
 import pygame
 
@@ -27,10 +27,10 @@ class Grid:
         self.grid = []
     
     def get_columns(self):
-        return math.floor(self.window.get("width") / snake.snake.width.width)
+        return math.floor(self.window.get("width") / 20)
 
     def get_rows(self):
-        return math.floor(self.window.get("height") / snake.snake.width.width)
+        return math.floor(self.window.get("height") / 20)
 
     def get_total_number_of_cells(self):
         return self.get_columns() * self.get_rows()
@@ -39,7 +39,7 @@ class Grid:
         for row in range(0, self.get_rows()):
             self.grid.append([])
             for col in range(0, self.get_columns()):
-                self.grid[row].append(Cell(col * snake.snake.width.width, row * snake.snake.width.width, snake.snake.width.width))
+                self.grid[row].append(Cell(col * 20, row * 20, 20))
 
         return self.grid
 
@@ -48,6 +48,6 @@ class Grid:
 
         for row in range(len(matrix_grid)):
             for col in range(len(matrix_grid[row])):
-                pygame.draw.rect(snake.game.screen, snake.game.colors["white"], matrix_grid[row][col].create_cell(), 1)
+                pygame.draw.rect(game.game.screen, game.game.colors["white"], matrix_grid[row][col].create_cell(), 1)
 
         return

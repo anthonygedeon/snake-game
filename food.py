@@ -2,6 +2,8 @@ import random
 
 import game
 
+from helper import find_availabe_spot
+
 import pygame
 
 class Food:
@@ -19,7 +21,8 @@ class Food:
         return self.position
 
     def change_location(self):
-        self.__init__() # TODO: update x, y coordinates without invoking the init method
+        self.x, self.y = find_availabe_spot(game.taken_spots)
+        self.position = pygame.Vector2(self.x, self.y)
 
     def draw_food(self):
         pygame.draw.rect(game.game.screen, color=self.color, rect=[
